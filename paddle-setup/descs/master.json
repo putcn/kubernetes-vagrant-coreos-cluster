@@ -1,0 +1,169 @@
+{
+    "kind": "ReplicaSet",
+    "spec": {
+        "template": {
+            "spec": {
+                "containers": [
+                    {
+                        "name": "paddlejob",
+                        "image": "paddlepaddle/paddlecloud-job",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/trainings",
+                                "name": "training-folder"
+                            }
+                        ],
+                        "command": [
+                            "paddle_k8s",
+                            "start_master"
+                        ],
+                        "env": [
+                            {
+                                "name": "PADDLE_JOB_NAME",
+                                "value": "paddlejob"
+                            },
+                            {
+                                "name": "TRAINERS",
+                                "value": "2"
+                            },
+                            {
+                                "name": "PSERVERS",
+                                "value": "2"
+                            },
+                            {
+                                "name": "TOPOLOGY",
+                                "value": "trainer_config.py"
+                            },
+                            {
+                                "name": "ENTRY",
+                                "value": "python train.py"
+                            },
+                            {
+                                "name": "TRAINER_PACKAGE",
+                                "value": "/example/word2vec"
+                            },
+                            {
+                                "name": "PADDLE_INIT_PORT",
+                                "value": "7164"
+                            },
+                            {
+                                "name": "PADDLE_INIT_TRAINER_COUNT",
+                                "value": "1"
+                            },
+                            {
+                                "name": "PADDLE_INIT_PORTS_NUM",
+                                "value": "1"
+                            },
+                            {
+                                "name": "PADDLE_INIT_PORTS_NUM_FOR_SPARSE",
+                                "value": "1"
+                            },
+                            {
+                                "name": "PADDLE_INIT_NUM_GRADIENT_SERVERS",
+                                "value": "2"
+                            },
+                            {
+                                "name": "PADDLE_INIT_NUM_PASSES",
+                                "value": "1"
+                            },
+                            {
+                                "name": "PADDLE_INIT_USE_GPU",
+                                "value": "0"
+                            },
+                            {
+                                "valueFrom": {
+                                    "fieldRef": {
+                                        "fieldPath": "metadata.namespace"
+                                    }
+                                },
+                                "name": "NAMESPACE"
+                            },
+                            {
+                                "name": "POD_IP",
+                                "valueFrom": {
+                                    "fieldRef": {
+                                        "fieldPath": "status.podIP"
+                                    }
+                                }
+                            }
+                        ],
+                        "ports": [
+                            {
+                                "containerPort": 8080,
+                                "name": "master-port"
+                            },
+                            {
+                                "containerPort": 2379,
+                                "name": "etcd-port"
+                            }
+                        ],
+                        "resources": {
+                            "requests": {
+                                "cpu": "1",
+                                "memory": "300Mi"
+                            },
+                            "limits": {
+                                "cpu": "1",
+                                "memory": "300Mi"
+                            }
+                        }
+                    },
+                    {
+                        "image": "quay.io/coreos/etcd:v3.2.1",
+                        "command": [
+                            "etcd",
+                            "-name",
+                            "etcd0",
+                            "-advertise-client-urls",
+                            "http://$(POD_IP):2379,http://$(POD_IP):4001",
+                            "-listen-client-urls",
+                            "http://0.0.0.0:2379,http://0.0.0.0:4001",
+                            "-initial-advertise-peer-urls",
+                            "http://$(POD_IP):2380",
+                            "-listen-peer-urls",
+                            "http://0.0.0.0:2380",
+                            "-initial-cluster",
+                            "etcd0=http://$(POD_IP):2380",
+                            "-initial-cluster-state",
+                            "new"
+                        ],
+                        "name": "paddlejob-etcd",
+                        "env": [
+                            {
+                                "valueFrom": {
+                                    "fieldRef": {
+                                        "fieldPath": "status.podIP"
+                                    }
+                                },
+                                "name": "POD_IP"
+                            },
+                            {
+                                "name": "ETCDCTL_API",
+                                "value": "3"
+                            }
+                        ]
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "training-folder",
+                        "hostPath": {
+                            "path": "/vagrant/trainings"
+                        }
+                    }
+                ]
+            },
+            "metadata": {
+                "labels": {
+                    "paddle-job-master": "paddlejob",
+                    "jobname": "paddlejob"
+                }
+            }
+        },
+        "replicas": 1
+    },
+    "apiVersion": "extensions/v1beta1",
+    "metadata": {
+        "name": "paddlejob-master"
+    }
+}
