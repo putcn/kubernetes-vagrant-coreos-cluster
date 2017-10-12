@@ -59,7 +59,7 @@ Please refer to the file of `../Vagrantfile`. Memory or CPU settings are from li
 All master, pserver and trainer desc files are located in the folder of `./descs`.
 
 ### Training customizations
-Training scripts and data are located in `../trainings`, this test setup runs `understand_sentiment` by default.
+Training scripts and data are located in `../trainings`, this test setup runs `recommender_system` by default.
 To run another test other than the default one:
 1. update `./descs/train.json`, the field of `ENTRY` and `TRAINER_PACKAGE`
 2. update `../trainings` accordingly with your training scripts and data
