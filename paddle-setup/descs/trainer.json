@@ -9,7 +9,7 @@
                 "containers": [
                     {
                         "name": "trainer",
-                        "image": "paddlepaddle/paddlecloud-job",
+                        "image": "putcn/cloud-job",
                         "volumeMounts": [
                             {
                                 "mountPath": "/trainings",
@@ -39,11 +39,11 @@
                             },
                             {
                                 "name": "ENTRY",
-                                "value": "python /trainings/understand_sentiment/train_ft.py train"
+                                "value": "python /trainings/recommender_system/train_ft.py"
                             },
                             {
                                 "name": "TRAINER_PACKAGE",
-                                "value": "/trainings/understand_sentiment"
+                                "value": "/trainings/recommender_system"
                             },
                             {
                                 "name": "PADDLE_INIT_PORT",

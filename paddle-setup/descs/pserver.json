@@ -6,7 +6,7 @@
                 "containers": [
                     {
                         "name": "paddlejob",
-                        "image": "paddlepaddle/paddlecloud-job",
+                        "image": "putcn/cloud-job",
                         "volumeMounts": [],
                         "command": [
                             "paddle_k8s",
