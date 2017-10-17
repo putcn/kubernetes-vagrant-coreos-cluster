@@ -86,7 +86,10 @@ def main():
     trainer = paddle.trainer.SGD(
         cost=cost,
         parameters=parameters,
-        update_equation=paddle.optimizer.Adam(learning_rate=1e-4))
+        update_equation=paddle.optimizer.Adam(learning_rate=1e-4),
+        is_local=False, 
+        pserver_spec=etcd_endpoint,
+        use_etcd=True)
     feeding = {
         'user_id': 0,
         'gender_id': 1,
@@ -112,7 +115,7 @@ def main():
             batch_size=256),
         event_handler=event_handler,
         feeding=feeding,
-        num_passes=1)
+        num_passes=10)
 
     user_id = 234
     movie_id = 345
