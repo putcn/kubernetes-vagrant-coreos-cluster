@@ -39,11 +39,11 @@
                             },
                             {
                                 "name": "ENTRY",
-                                "value": "python /trainings/recommender_system/train_ft.py"
+                                "value": "python /trainings/fit_a_line/train_ft.py"
                             },
                             {
                                 "name": "TRAINER_PACKAGE",
-                                "value": "/trainings/recommender_system"
+                                "value": "/trainings/fit_a_line"
                             },
                             {
                                 "name": "PADDLE_INIT_PORT",

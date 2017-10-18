@@ -35,7 +35,7 @@
                             },
                             {
                                 "name": "TRAINER_PACKAGE",
-                                "value": "/trainings/word2vec"
+                                "value": "/trainings/fit_a_line"
                             },
                             {
                                 "name": "PADDLE_INIT_PORT",
